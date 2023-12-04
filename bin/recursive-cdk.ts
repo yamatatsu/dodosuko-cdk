@@ -1,21 +1,26 @@
-#!/usr/bin/env node
-import 'source-map-support/register';
-import * as cdk from 'aws-cdk-lib';
-import { RecursiveCdkStack } from '../lib/recursive-cdk-stack';
+import * as cdk from "aws-cdk-lib";
+import * as cw from "aws-cdk-lib/aws-cloudwatch";
 
 const app = new cdk.App();
-new RecursiveCdkStack(app, 'RecursiveCdkStack', {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
+const stack = new cdk.Stack(app, "RecursiveCdkStack");
 
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
-
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
-
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+new cw.Dashboard(stack, "DodosukoDashboard", {
+  widgets: [recursiveDodosukoWidgets()],
 });
+
+function recursiveDodosukoWidgets(dodosuko = ""): cw.TextWidget[] {
+  if (dodosuko.endsWith("どどすこすこすこ")) {
+    return [new cw.TextWidget({ markdown: `# ラブ注入`, width: 4 })];
+  }
+
+  const phrase = randomDodosuko();
+
+  return [
+    new cw.TextWidget({ markdown: `${phrase}`, width: 4 }),
+    ...recursiveDodosukoWidgets(dodosuko + phrase),
+  ];
+}
+
+function randomDodosuko(): string {
+  return Math.random() < 0.5 ? "どど" : "すこ";
+}
