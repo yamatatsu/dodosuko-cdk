@@ -5,16 +5,16 @@
     "build": "marp ./slides --html"
   },
   "devDependencies": {
-    "@marp-team/marp-cli": "^3.4.0",
-    "@types/node": "20.9.1",
-    "aws-cdk": "2.113.0",
-    "esbuild": "^0.19.8",
-    "prettier": "^3.1.0",
-    "ts-node": "^10.9.1",
-    "typescript": "~5.2.2"
+    "@marp-team/marp-cli": "^4.0.3",
+    "@types/node": "22.10.2",
+    "aws-cdk": "2.173.1",
+    "esbuild": "^0.24.0",
+    "prettier": "^3.4.2",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.7.2"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.113.0",
-    "constructs": "^10.0.0"
+    "aws-cdk-lib": "2.173.1",
+    "constructs": "^10.4.2"
   }
 }
