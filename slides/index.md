@@ -3,9 +3,9 @@ marp: true
 title: AWS CDKの真の力を引き出す
 description: AWS CDKの「アプリケーションプログラミング言語でインフラを定義できる」という特性を最大限に活かして、CDKの真の力を引き出します
 author: yamatatsu
-url: https://yamatatsu.github.io/dodosuko-cdk
-image: https://yamatatsu.github.io/dodosuko-cdk/ogp.png
-keywords: [aws, cdk, dodosuko]
+url: https://yamatatsu.github.io/zundoko-cdk
+image: https://yamatatsu.github.io/zundoko-cdk/ogp.png
+keywords: [aws, cdk, zundoko]
 theme: default
 transition: slide 300ms
 style: |
@@ -29,7 +29,7 @@ style: |
 # AWS CDKの真の力を引き出す
 
 やまたつ @jawsug_cdk
-2023-12-06
+2024-12-18
 
 ---
 
@@ -70,22 +70,36 @@ AWS CDKはアプリケーションプログラミング言語でインフラを�
 
 ---
 
-ドドスコ
+ズンドコきよし
 
 ---
 
-# AWS CDKの真の力を引き出すためにドドスコしてみた
+# AWS CDKの真の力を引き出すためにズンドコきよししてみた
 
 やまたつ @jawsug_cdk
-2023-12-06
+2024-12-18
 
 ---
 
-なにをドドスコしよう
+ズンドコきよしのおさらい
 
 ---
 
-CDKのくせに毎回実行結果が変わって、そのドドスコ成果が一発で見えて、500リソース制限に引っかかりにくいやつ。。。
+![](./zundoko-origin.png)
+https://x.com/kumiromilk/status/707437861881180160
+
+---
+
+大ズンドコ時代
+https://qiita.com/shunsugai@github/items/971a15461de29563bf90
+
+---
+
+なにをズンドコしよう
+
+---
+
+CDKのくせに毎回実行結果が変わって、そのズンドコ成果が一発で見えて、500リソース制限に引っかかりにくいやつ。。。
 
 ---
 
@@ -93,10 +107,10 @@ CloudWatch Dashboards
 
 ---
 
-# AWS CDKの真の力を引き出すためにCloudWatch Dashboardsでドドスコしてみた
+# AWS CDKの真の力を引き出すためにCloudWatch Dashboardsでズンドコしてみた
 
 やまたつ @jawsug_cdk
-2023-12-06
+2024-12-18
 
 ---
 
@@ -111,20 +125,20 @@ import * as cw from "aws-cdk-lib/aws-cloudwatch";
 const app = new cdk.App();
 const stack = new cdk.Stack(app, "RecursiveCdkStack");
 
-new cw.Dashboard(stack, "DodosukoDashboard", {
-  widgets: [recursiveDodosukoWidgets()],
+new cw.Dashboard(stack, "ZundokoDashboard", {
+  widgets: [recursiveZundokoWidgets()],
 });
 
-function recursiveDodosukoWidgets(dodosuko = ""): cw.TextWidget[] {
-  if (dodosuko.endsWith("どどすこすこすこ")) {
-    return [new cw.TextWidget({ markdown: `# ラブ注入`, width: 4 })];
+function recursiveZundokoWidgets(zundoko = ""): cw.TextWidget[] {
+  if (zundoko.endsWith("ずんずんずんずんどこ")) {
+    return [new cw.TextWidget({ markdown: `# き・よ・し！！`, width: 4 })];
   }
 
-  const phrase = Math.random() < 0.5 ? "どど" : "すこ";
+  const phrase = Math.random() < 0.5 ? "ずん" : "どこ";
 
   return [
     new cw.TextWidget({ markdown: `${phrase}`, width: 4 }),
-    ...recursiveDodosukoWidgets(dodosuko + phrase),
+    ...recursiveZundokoWidgets(zundoko + phrase),
   ];
 }
 ```
@@ -135,6 +149,150 @@ function recursiveDodosukoWidgets(dodosuko = ""): cw.TextWidget[] {
 
 ---
 
+🎉🎉🎉
+
+---
+
+🤔
+
+---
+
+🤔 これで終わり？
+
+---
+
+🤔 この程度なのか？
+
+---
+
+🤔 俺たちのきよしはこの程度なのか？
+
+---
+
+🤔 まだConstruct Treeをズンドコ掘ってない
+
+---
+
+# AWS CDKの真の力を引き出すためにConstruct Treeをズンドコ掘ってみた
+
+やまたつ @jawsug_cdk
+2024-12-18
+
+---
+
+早速コード
+
+---
+
+```ts
+const topic = new sns.Topic(stack, "OutputTopic", {});
+
+new chatbot.SlackChannelConfiguration(stack, "SlackChannel", {
+  slackChannelConfigurationName: "Zundoko",
+  slackWorkspaceId: "XXXXXXXXX",
+  slackChannelId: "XXXXXXXXXXX",
+  notificationTopics: [topic],
+});
+
+new Zundoko(stack, "Zundoko", {
+  outputTarget: (phrase) =>
+    new targets.SnsTopic(topic, {
+      message: events.RuleTargetInput.fromObject({
+        version: "1.0",
+        source: "custom",
+        content: {
+          description: phrase,
+        },
+      }),
+    }),
+});
+```
+
+---
+
+```ts
+export class Zundoko extends Construct {
+  public readonly eventBus: events.IEventBus;
+
+  constructor(
+    scope: Construct,
+    id: string,
+    props: {
+      outputTarget: (phrase: string) => events.IRuleTarget;
+      history?: string;
+    },
+  ) {
+    super(scope, id);
+
+    // 後述
+  }
+}
+
+function randomZundoko(): string {
+  return Math.random() < 0.6 ? "ずん" : "どこ";
+}
+```
+
+---
+
+```ts
+const { outputTarget, history = "" } = props;
+
+const last = history.endsWith("ずんずんずんずんどこ");
+
+const phrase = last ? "き・よ・し！！" : randomZundoko();
+
+this.eventBus = new events.EventBus(this, "Bus");
+const rule = new events.Rule(this, "Rule", {
+  eventBus: this.eventBus,
+  eventPattern: { source: events.Match.anyOf(events.Match.prefix("")) },
+});
+rule.addTarget(outputTarget(phrase));
+
+if (last) {
+  return;
+}
+
+const { eventBus } = new Zundoko(this, "Zundoko", {
+  outputTarget,
+  history: history + phrase,
+});
+
+const queue = new sqs.Queue(this, "Queue", {
+  deliveryDelay: cdk.Duration.seconds(1),
+});
+rule.addTarget(new targets.SqsQueue(queue));
+
+new pipes.Pipe(this, "Pipe", {
+  source: new pipesSources.SqsSource(queue),
+  target: new pipesTargets.EventBridgeTarget(eventBus, {
+    inputTransformation: pipes.InputTransformation.fromObject({}),
+  }),
+});
+```
+
+---
+
+デプロイ！ 🚀
+
+---
+
+<span style="color: red">Error: Number of resources in stack 'ZundokoCdkStack': 645 is greater than allowed maximum of 500</span>
+
+---
+
+![](./zundoko-tree.png)
+
+---
+
+![](./zundoko-tree-zoom.png)
+
+---
+
+デモ
+
+---
+
 # まとめ
 
 ---
@@ -142,8 +300,8 @@ function recursiveDodosukoWidgets(dodosuko = ""): cw.TextWidget[] {
 まとめ
 
 - 再帰のシンプルな記述で大きな成果が得られて大満足した
-- IaCの「結果が収束する」という概念をぶっ壊せて良かった
-- そんなときも「愛（ラブ）」で乗り切ってる感じがして感動した
+- IaCの「状態が収束する」という概念をぶっ壊せて良かった
+- そんなときも「き・よ・し！！」のコールで乗り切ってる感じがして感動した
 
 ---
 
