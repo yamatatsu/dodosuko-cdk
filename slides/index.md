@@ -42,7 +42,7 @@ style: |
   <ul style="list-style-type: none; line-height: 1.4">
     <li style="font-size: 56px; font-weight: 700;">山本達也（やまたつ）</li>
     <li style="font-size: 32px; margin-bottom: 0px;">クラスメソッド株式会社</li>
-    <li style="font-size: 32px; margin-bottom: 16px;">CX事業本部 デリバリー部</li>
+    <li style="font-size: 32px; margin-bottom: 16px;">製造BT部</li>
     <li style="font-size: 24px; margin-bottom: 0px;">
       <a href="https://twitter.com/yamatatsu193">Twitter: @yamatatsu193</a>
     </li>
